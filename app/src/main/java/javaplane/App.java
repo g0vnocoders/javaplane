@@ -5,36 +5,44 @@ package javaplane;
 
 import javax.swing.*;
 
-import org.checkerframework.common.value.qual.BoolVal;
-
+import javaplane.Event.BBClickListener;
+import javaplane.Event.RepaintListener;
 import javaplane.Graphics.LayerManager;
-import javaplane.Graphics.shit;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
+//основна панель для малювання
 class AppCanvas extends JPanel {
-    private Timer gameThread;
     Boolean state = false;
-    private LayerManager layerManager = null;
-    public AppCanvas(LayerManager lm){
+    private LayerManager layerManager = null;//шари зображень
+    private App app = null;//головний клас
+    public AppCanvas(LayerManager lm, App app){
+        this.app = app;
         layerManager = lm;
         //resize to bg image size
         Image bg = layerManager.background;
         setPreferredSize(new Dimension(bg.getWidth(null),bg.getHeight(null)));
         setBackground(Color.BLACK);
-        //setDoubleBuffered(true);
+        setDoubleBuffered(true);
         setFocusable(true);
         requestFocus();
     }
 
+    //перемальовуємо панель
     @Override
     protected void paintComponent(Graphics g){
+        g.setColor(Color.red);
         // Perform your rendering operations on the off-screen buffer
         layerManager.paint(g);
+        //call all repaint listeners of app
+        for (RepaintListener listener : app.repaintListeners) {
+            listener.repaintRequested(g);
+        }
+        
         g.dispose();
     }
 }
@@ -42,7 +50,9 @@ class AppCanvas extends JPanel {
 public class App extends JFrame implements ActionListener {
     private boolean isRedState = true;
     private LayerManager layerManager = new LayerManager();
+    public List<RepaintListener> repaintListeners = new ArrayList<>();
     public AppCanvas canvas;
+    
     public App() {
         super("JavaPlane");
         // Set up the UI and buttons.
@@ -56,16 +66,27 @@ public class App extends JFrame implements ActionListener {
         setSize(layerManager.background.getWidth(null), layerManager.background.getHeight(null));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //add canvas
-        canvas = new AppCanvas(layerManager);
+        canvas = new AppCanvas(layerManager, this);
         add(canvas);
-        pack();
+        //add event manager
+        EventManager eventManager = new EventManager(this);
+        //add hitbox
+        eventManager.registerClickEvent("Турбіна", new Rectangle(0, 0, 100, 100), new BBClickListener() {
+            public void onClick() {
+                layerManager.toggleLayerState("1.png");
+                repaint();
+            }
+        });
 
     }
+    //перемальовуємо вікно разом з панеллю
     public void repaint(){
+        System.out.println("repaint");
         super.repaint();
         canvas.revalidate();
         canvas.repaint();
     }
+    //глобальний обробник подій
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Change Lamp Color")) {
             isRedState = !isRedState;
@@ -74,8 +95,8 @@ public class App extends JFrame implements ActionListener {
         }
     }
 
-
     public static void main(String[] args) {
+        System.setProperty("sun.java2d.uiScale", "1");
         SwingUtilities.invokeLater(() -> {
             App app = new App();
             app.setVisible(true);
