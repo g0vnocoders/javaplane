@@ -4,9 +4,21 @@
 package javaplane;
 
 import org.junit.jupiter.api.Test;
+
+import javaplane.Objects.Plane;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
+    @Test void testPlaneTankFuelDecrease() {
+        Plane plane = new Plane();
+        plane.rightTank.consume(50.0);
+        assertEquals(plane.rightTank.capacity - 50.0, plane.rightTank.fuel);
+    }
+    @Test void testPlaneFuelDecrease() {
+        Plane plane = new Plane();
+        plane.leftPump.isOn = true;
+        plane.tick(1.0);
+        assertEquals(plane.leftTank.capacity - plane.fuelConsumptiondx, plane.leftTank.fuel);
     }
 }

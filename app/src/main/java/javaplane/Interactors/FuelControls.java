@@ -1,7 +1,6 @@
 package javaplane.Interactors;
 
 import javaplane.Objects.Plane;
-import javaplane.Presenters.PlanePresenter;
 
 public class FuelControls {
     private Plane plane;

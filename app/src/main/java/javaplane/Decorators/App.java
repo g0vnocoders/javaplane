@@ -1,7 +1,6 @@
 package javaplane.Decorators;
 
 import java.awt.BorderLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,10 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import javaplane.Event.BBClickListener;
+
 import javaplane.Event.RepaintListener;
 import javaplane.Graphics.AppCanvas;
-import javaplane.Graphics.EventManager;
 import javaplane.Graphics.LayerManager;
 
 public class App extends JFrame implements ActionListener {

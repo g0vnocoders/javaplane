@@ -2,7 +2,6 @@ package javaplane.Graphics;
 
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 

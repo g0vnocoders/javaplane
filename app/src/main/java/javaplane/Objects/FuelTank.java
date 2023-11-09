@@ -16,6 +16,7 @@ public class FuelTank {
             fuel = 0;
             throw new NoFuelException(tankType);
         }
+        fuel -= amount;
         return amount;
     }
     /**
