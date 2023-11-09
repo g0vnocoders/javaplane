@@ -31,6 +31,13 @@ public class LayerManager {
     private void scanResources(){
         //scan resources/graphics for images and load each to layers map
         URL url = getClass().getClassLoader().getResource("graphics");
+        System.out.println("Loading images from: " + url.getPath());
+        //check if jar
+        if(url.getPath().contains(".jar")){
+            //load from jar
+            loadFromJar(url);
+            return;
+        }
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(url.getPath()))) {
             for (Path entry : stream) {
                 //load png
@@ -49,6 +56,42 @@ public class LayerManager {
             System.out.println("Error loading images: " + e);
         }
     }
+    //load files using zip stream
+    private void loadFromJar(URL url) {
+        //load from jar
+        try {
+            //get jar path
+            String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+            //load jar
+            java.util.jar.JarFile jar = new java.util.jar.JarFile(jarPath);
+            //get entries
+            java.util.Enumeration<java.util.jar.JarEntry> entries = jar.entries();
+            //loop through entries
+            while (entries.hasMoreElements()) {
+                //get entry
+                java.util.jar.JarEntry entry = entries.nextElement();
+                //check if entry is in graphics folder
+                if(entry.getName().startsWith("graphics/")){
+                    //load png
+                    if(entry.getName().endsWith(".png")){
+                        //get filename
+                        String filename = entry.getName().substring(entry.getName().lastIndexOf("/") + 1);
+                        //add to files list
+                        files.add(filename);
+                        //load image
+                        layers.put(filename, ImageIO.read(jar.getInputStream(entry)));
+                        //set layer state to true
+                        layerStates.put(filename, true);
+                    }
+                }
+            }
+            //close jar
+            jar.close();
+        } catch (IOException e) {
+            System.out.println("Error loading images: " + e);
+        }
+    }
+
     public void setLayerState(String layer, boolean state){
         layerStates.put(layer, state);
     }

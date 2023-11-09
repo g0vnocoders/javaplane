@@ -96,7 +96,6 @@ public class App extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        System.setProperty("sun.java2d.uiScale", "1");
         SwingUtilities.invokeLater(() -> {
             App app = new App();
             app.setVisible(true);

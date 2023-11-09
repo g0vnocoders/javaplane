@@ -33,3 +33,13 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = project.application.mainClass.get()
+        //specify resource files
+    }
+    from(sourceSets.main.get().output) {
+        include("resources/**/*")
+    }
+    
+}

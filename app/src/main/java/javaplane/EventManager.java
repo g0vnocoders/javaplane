@@ -25,7 +25,7 @@ public class EventManager {
         this.app = application;
         //register global click event
         app.canvas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
                 onClick(evt.getX(), evt.getY());
             }
         });
@@ -56,8 +56,9 @@ public class EventManager {
     }
     public void paint(java.awt.Graphics g) {
         if (showHitBoxes) {
-            g.setColor(Color.red);
             for (Map.Entry<String, Rectangle> entry : Rectangles.entrySet()) {
+                //random hue color
+                g.setColor(Color.getHSBColor((float) Math.random(), 1, 1));
                 Rectangle Rectangle = entry.getValue();
                 g.drawRect(Rectangle.x, Rectangle.y, Rectangle.width, Rectangle.height);
             }
