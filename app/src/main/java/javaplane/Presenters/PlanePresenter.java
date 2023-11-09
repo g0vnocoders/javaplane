@@ -8,6 +8,16 @@ import javaplane.Graphics.EventManager;
 import javaplane.Interactors.FuelControls;
 import javaplane.Routers.ResetPlane;
 
+class Controls {
+    public String name;
+    public Rectangle pos;
+    public BBClickListener callback;
+    public Controls(String name, Rectangle pos, BBClickListener callback) {
+        this.name = name;
+        this.pos = pos;
+        this.callback = callback;
+    }
+}
 public class PlanePresenter {
     private App app;//decorator
     private ResetPlane resetPlane;//router
@@ -26,16 +36,77 @@ public class PlanePresenter {
         bindResetRouterToPresenter();
     }
     public void bindDecoratorToPresenter() {        
-        //лівий пожежний кран
-        eventManager.registerClickEvent("Лівий ПК", new Rectangle(0, 0, 100, 100), 
-            new BBClickListener() {
+        //лівий пожежний кран кришка
+        Controls[] controls = new Controls[] {
+            new Controls("Лівий ПК кришка", new Rectangle(89, 13, 178, 67), new BBClickListener() {
                 public void onClick() {
                     fuelControls.toggleLeftEngine();
                     app.layerManager.toggleLayerState("1.png");
                     app.repaint();
                 }
-            }
-        );
+            }),
+            new Controls("Правий ПК кришка", new Rectangle(613, 13, 200, 89), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Лівий ПК", new Rectangle(115, 129, 68, 171), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Правий ПК", new Rectangle(639, 129, 68, 171), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Кільцювання", new Rectangle(354, 371, 122, 117), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Лівий Насос 1", new Rectangle(94, 503, 126, 122), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Лівий Насос 2", new Rectangle(254, 503, 126, 122), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Правий Насос 1", new Rectangle(445, 503, 126, 122), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+            new Controls("Правий Насос 2", new Rectangle(596, 503, 126, 122), new BBClickListener() {
+                public void onClick() {
+                    fuelControls.toggleLeftEngine();
+                    app.layerManager.toggleLayerState("1.png");
+                    app.repaint();
+                }
+            }),
+        };
+        
+        for (Controls el : controls) {
+            eventManager.registerClickEvent(el.name, el.pos, el.callback);
+        }
+        
     }
     public void bindResetRouterToPresenter() {
         //кнопка reset

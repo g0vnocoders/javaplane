@@ -22,13 +22,6 @@ public class App extends JFrame implements ActionListener {
     
     public App() {
         super("JavaPlane");
-        // Set up the UI and buttons.
-        JButton changeStateButton = new JButton("Change Lamp Color");
-        changeStateButton.addActionListener(this);
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(changeStateButton);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
         //resize to bg image size
         setSize(layerManager.background.getWidth(null), layerManager.background.getHeight(null));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
