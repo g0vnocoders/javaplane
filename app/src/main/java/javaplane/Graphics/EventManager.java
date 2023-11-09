@@ -1,4 +1,4 @@
-package javaplane;
+package javaplane.Graphics;
 
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 
+import javaplane.Decorators.App;
 import javaplane.Event.BBClickListener;
 import javaplane.Event.RepaintListener;
 
@@ -17,7 +18,7 @@ public class EventManager {
     private Map<String, Rectangle> Rectangles;
     private Map<String, BBClickListener> callbacks;
     private App app;
-    private Boolean showHitBoxes = true;
+    public Boolean showHitBoxes = true;
 
     public EventManager(App application) {
         this.Rectangles = new HashMap<String, Rectangle>();
@@ -49,10 +50,6 @@ public class EventManager {
                 callbacks.get(RectangleName).onClick();
             }
         }
-    }
-    //debug
-    public void toggleHitBoxes() {
-        showHitBoxes = !showHitBoxes;
     }
     public void paint(java.awt.Graphics g) {
         if (showHitBoxes) {

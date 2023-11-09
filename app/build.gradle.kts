@@ -26,7 +26,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass.set("javaplane.App")
+    mainClass.set("javaplane.Main")
 }
 
 tasks.named<Test>("test") {
