@@ -98,8 +98,13 @@ public class LayerManager {
     public void toggleLayerState(String layer){
         layerStates.put(layer, !layerStates.get(layer));
     }
-    public void getLayerState(String layer){
-        layerStates.get(layer);
+    public void disableAllLayers(){
+        for(String layer : layers.keySet()){
+            setLayerState(layer, false);
+        }
+    }
+    public Boolean getLayerState(String layer){
+        return layerStates.get(layer);
     }
     public void paint(Graphics g) {
         

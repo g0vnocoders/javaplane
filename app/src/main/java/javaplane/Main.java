@@ -13,7 +13,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             Plane an140 = new Plane();
             PlanePresenter planePresenter = new PlanePresenter(new App(), new ResetPlane(), new FuelControls(an140));
-            planePresenter.setDebug(true);
+            //planePresenter.setDebug(true);
         });
     }
 }

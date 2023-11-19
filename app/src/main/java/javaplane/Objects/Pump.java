@@ -18,6 +18,7 @@ public class Pump {
     }
     /**
      * Витрачає паливо з бака якщо увімкнений
+     * @param dt - час витрачання палива в секундах
      * @return кількість палива що витрачено
      * @throws NoFuelException - якщо палива немає
      * @throws PumpIsOffException - якщо насос вимкнений
@@ -25,6 +26,6 @@ public class Pump {
     public double consume(double dt) throws NoFuelException, PumpIsOffException {
         if(!isOn)
             return 0;//throw new PumpIsOffException(pumpType);
-        return tank.consume(fuelConsumptiondx) * dt;
+        return tank.consume(fuelConsumptiondx) * dt;// літри/сек * сек = літри
     }
 }

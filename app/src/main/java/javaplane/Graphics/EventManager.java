@@ -17,7 +17,7 @@ public class EventManager {
     private Map<String, Rectangle> Rectangles;
     private Map<String, BBClickListener> callbacks;
     private App app;
-    public Boolean showHitBoxes = true;
+    public Boolean showHitBoxes = false;
 
     public EventManager(App application) {
         this.Rectangles = new HashMap<String, Rectangle>();

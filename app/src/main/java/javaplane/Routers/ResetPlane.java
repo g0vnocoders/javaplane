@@ -1,5 +1,6 @@
 package javaplane.Routers;
 
+import javaplane.Decorators.App;
 import javaplane.Objects.Plane;
 
 public class ResetPlane implements Router {
@@ -15,6 +16,16 @@ public class ResetPlane implements Router {
 
         plane.rightEngineValve = true;
         plane.leftEngineValve = true;
+    }
+    public void resetView(App app){
+        app.layerManager.disableAllLayers();
+        app.layerManager.setLayerState("coverleft.png", true);
+        app.layerManager.setLayerState("coverright.png", true);
+        //початкова положення кранів
+        //app.layerManager.setLayerState("switchleftoff.png", true);
+        //app.layerManager.setLayerState("switchrightoff.png", true);
+
+        app.repaint();
     }
     
 }

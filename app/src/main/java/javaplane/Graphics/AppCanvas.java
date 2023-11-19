@@ -33,11 +33,12 @@ public class AppCanvas extends JPanel {
         g.setColor(Color.red);
         // Perform your rendering operations on the off-screen buffer
         layerManager.paint(g);
+        // шрифт для 7-сегментного дисплея
+        g.setFont(new Font("Seven Segment", Font.PLAIN, 20));
         //call all repaint listeners of app
         for (RepaintListener listener : app.repaintListeners) {
             listener.repaintRequested(g);
         }
-        
         g.dispose();
     }
 }

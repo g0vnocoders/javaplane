@@ -1,25 +1,25 @@
 package javaplane.Decorators;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-
 import javaplane.Event.RepaintListener;
 import javaplane.Graphics.AppCanvas;
 import javaplane.Graphics.LayerManager;
+import javax.swing.*;
 
 public class App extends JFrame implements ActionListener {
     public LayerManager layerManager = new LayerManager();
     public List<RepaintListener> repaintListeners = new ArrayList<>();
     public AppCanvas canvas;
-    
+    public JButton start = new JButton("Start");
+    public JButton reset = new JButton("Reset");
+    public JButton voice = new JButton("Voice");
+    public JButton help = new JButton("Help");
+
     public App() {
         super("JavaPlane");
         //resize to bg image size
@@ -29,7 +29,18 @@ public class App extends JFrame implements ActionListener {
         canvas = new AppCanvas(layerManager, this);
         add(canvas);
         setVisible(true);
-
+        //align buttons
+        start.setBounds(850, 0, 100, 50);
+        reset.setBounds(850, 50, 100, 50);
+        voice.setBounds(850, 100, 100, 50);
+        help.setBounds(850, 150, 100, 50);
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(null);
+        controlPanel.add(start);
+        controlPanel.add(reset);
+        controlPanel.add(voice);
+        controlPanel.add(help);
+        add(controlPanel);
     }
     //перемальовуємо вікно разом з панеллю
     public void repaint(){
@@ -40,9 +51,5 @@ public class App extends JFrame implements ActionListener {
     }
     //глобальний обробник подій
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Change Lamp Color")) {
-            layerManager.toggleLayerState("1.png");
-            repaint();
-        }
     }
 }
