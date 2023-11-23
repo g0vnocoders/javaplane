@@ -19,7 +19,7 @@ public class App extends JFrame implements ActionListener {
     public JButton reset = new JButton("Reset");
     public JButton voice = new JButton("Voice");
     public JButton help = new JButton("Help");
-
+    public JLabel helpText = new JLabel("<html>Натисніть кнопку Start, щоб почати симуляцію.</html>");
     public App() {
         super("JavaPlane");
         //resize to bg image size
@@ -32,15 +32,24 @@ public class App extends JFrame implements ActionListener {
         //align buttons
         start.setBounds(850, 0, 100, 50);
         reset.setBounds(850, 50, 100, 50);
-        voice.setBounds(850, 100, 100, 50);
-        help.setBounds(850, 150, 100, 50);
+        voice.setBounds(1000, 0, 100, 50);
+        help.setBounds(1000, 50, 100, 50);
+        helpText.setBounds(850, 100, 300, 500);
+        helpText.setBackground(new java.awt.Color(240, 240, 240));
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(null);
         controlPanel.add(start);
         controlPanel.add(reset);
         controlPanel.add(voice);
         controlPanel.add(help);
+        controlPanel.add(helpText);
         add(controlPanel);
+        //додаємо обробку помилок на текстовий інформатор
+        new GlobalExceptions(new UserErrorEvent() {
+            public void onError(String message) {
+                helpText.setText("<html>" + message + "</html>");
+            }
+        });
     }
     //перемальовуємо вікно разом з панеллю
     public void repaint(){

@@ -7,7 +7,9 @@ import javaplane.Event.BBClickListener;
 import javaplane.Event.RepaintListener;
 import javaplane.Graphics.EventManager;
 import javaplane.Interactors.FuelControls;
+import javaplane.Routers.RandomFuel;
 import javaplane.Routers.ResetPlane;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.event.*;
@@ -24,6 +26,7 @@ class Controls {
 public class PlanePresenter {
     private App app;//decorator
     private ResetPlane resetPlane;//router
+    private RandomFuel randomFuel;//router
     private FuelControls fuelControls;//interactor
     private EventManager eventManager;//event manager
     private Timer timer; //timer
@@ -88,6 +91,10 @@ public class PlanePresenter {
             }),
             new Controls("Лівий ПК", new Rectangle(115, 129, 68, 171), new BBClickListener() {
                 public void onClick() {
+                    //нічого не робити якщо кришка закрита
+                    if (app.layerManager.getLayerState("coverleft.png")) {
+                        return;
+                    }
                     fuelControls.toggleLeftEngine();
                     app.layerManager.toggleLayerState("switchleftoff.png");
                     app.layerManager.toggleLayerState("switchlefton.png");
@@ -96,6 +103,10 @@ public class PlanePresenter {
             }),
             new Controls("Правий ПК", new Rectangle(639, 129, 68, 171), new BBClickListener() {
                 public void onClick() {
+                    //нічого не робити якщо кришка закрита
+                    if (app.layerManager.getLayerState("coverright.png")) {
+                        return;
+                    }
                     fuelControls.toggleLeftEngine();
                     app.layerManager.toggleLayerState("switchrightoff.png");
                     app.layerManager.toggleLayerState("switchrighton.png");
@@ -146,13 +157,14 @@ public class PlanePresenter {
     }
     public void bindRouterToPresenter() {
         //кнопка reset
-        eventManager.registerClickEvent("reset", new Rectangle(500, 0, 100, 100), 
-            new BBClickListener() {
-                public void onClick() {
-                    resetPlane.reset(fuelControls.getPlane());
-                    app.repaint();
-                }
+        app.reset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                timer.cancel();
+                resetPlane.reset(fuelControls.getPlane());
+                resetPlane.resetView(app);
+                randomFuel.reset(fuelControls.getPlane());
+                app.repaint();
             }
-        );
+        });
     }
 }
