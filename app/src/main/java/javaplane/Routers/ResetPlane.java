@@ -9,10 +9,10 @@ public class ResetPlane implements Router {
         plane.isRingOn = false;
         plane.leftTank.fuel = plane.leftTank.capacity;
         plane.rightTank.fuel = plane.rightTank.capacity;
-        plane.leftPump.isOn = false;
-        plane.leftPump2.isOn = false;
-        plane.rightPump.isOn = false;
-        plane.rightPump2.isOn = false;
+        plane.leftPump.isOn = true;
+        plane.leftPump2.isOn = true;
+        plane.rightPump.isOn = true;
+        plane.rightPump2.isOn = true;
 
         plane.rightEngineValve = true;
         plane.leftEngineValve = true;
@@ -21,9 +21,14 @@ public class ResetPlane implements Router {
         app.layerManager.disableAllLayers();
         app.layerManager.setLayerState("coverleft.png", true);
         app.layerManager.setLayerState("coverright.png", true);
-        //початкова положення кранів
-        //app.layerManager.setLayerState("switchleftoff.png", true);
-        //app.layerManager.setLayerState("switchrightoff.png", true);
+        //двигуни увімкнені
+        app.layerManager.setLayerState("greenleft.png", true);
+        app.layerManager.setLayerState("greenright.png", true);
+        //насоси увімкнені
+        app.layerManager.setLayerState("pump1on.png", true);
+        app.layerManager.setLayerState("pump2on.png", true);
+        app.layerManager.setLayerState("pump3on.png", true);
+        app.layerManager.setLayerState("pump4on.png", true);
 
         app.repaint();
     }

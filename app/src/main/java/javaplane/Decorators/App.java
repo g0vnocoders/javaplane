@@ -15,9 +15,9 @@ public class App extends JFrame implements ActionListener {
     public LayerManager layerManager = new LayerManager();
     public List<RepaintListener> repaintListeners = new ArrayList<>();
     public AppCanvas canvas;
-    public JButton start = new JButton("Start");
-    public JButton reset = new JButton("Reset");
-    public JButton voice = new JButton("Voice");
+    public JButton start = new JButton("Навчання");
+    public JButton reset = new JButton("Самостійно");
+    public JButton voice = new JButton("Голос");
     public JButton help = new JButton("Help");
     public JLabel helpText = new JLabel("<html>Натисніть кнопку Start, щоб почати симуляцію.</html>");
     public App() {

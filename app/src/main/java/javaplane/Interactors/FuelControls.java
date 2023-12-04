@@ -85,6 +85,8 @@ public class FuelControls {
     public Boolean getRightEngineCover() {
         return rightEngineCover;
     }
+    //скидaння
+    public void reset(){}
     //використовувати тільки для тестів
     public Plane getPlane() {
         return plane;

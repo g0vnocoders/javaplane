@@ -2,11 +2,13 @@ package javaplane.Presenters;
 
 import java.awt.Rectangle;
 
+import javaplane.Audio.AudioManager;
 import javaplane.Decorators.App;
 import javaplane.Event.BBClickListener;
 import javaplane.Event.RepaintListener;
 import javaplane.Graphics.EventManager;
 import javaplane.Interactors.FuelControls;
+import javaplane.Interactors.FuelControlsStrict;
 import javaplane.Routers.RandomFuel;
 import javaplane.Routers.ResetPlane;
 
@@ -37,12 +39,21 @@ public class PlanePresenter {
     public PlanePresenter(App app, ResetPlane resetPlane, FuelControls fuelControls) {
         this.app = app;
         this.resetPlane = resetPlane;
+        this.randomFuel = new RandomFuel();
         this.fuelControls = fuelControls;
         this.eventManager = new EventManager(this.app);
         bindDecoratorToPresenter();
         bindRouterToPresenter();
         resetPlane.reset(fuelControls.getPlane());
         resetPlane.resetView(app);
+        new Thread(() -> {
+            while(true){
+                app.layerManager.gauge = (float) fuelControls.getPlane().leftTank.fuel / (float) fuelControls.getPlane().leftTank.capacity;
+                try{
+                    Thread.sleep(100);
+                } catch (Exception ex) {}
+            }
+        }).start();
     }
     public void bindDecoratorToPresenter() {        
         //перемальовка семисегментного дисплея
@@ -52,31 +63,16 @@ public class PlanePresenter {
                 g.drawString(String.valueOf(fuelControls.getRightTankFuel()), 535, 850);
             };
         });
-        //start
-        app.start.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                timer = new Timer();
-                timer.scheduleAtFixedRate(new TimerTask() {
-                    public void run() {
-                        //похідна від часу залежно від таймеру
-                        double dt = System.currentTimeMillis() - scheduledExecutionTime();
-                        fuelControls.tick(dt);
-                        app.repaint();
-                    }
-                }, 0, 1000);
-            }
-        });
-        
-
-
         //додаємо обробники кліків на кнопки
         Controls[] controls = new Controls[] {
             new Controls("Лівий ПК кришка", new Rectangle(89, 13, 178, 67), new BBClickListener() {
                 public void onClick() {
                     Boolean prev = app.layerManager.getLayerState("coverleft.png");
                     app.layerManager.toggleLayerState("coverleft.png");
-                    app.layerManager.setLayerState("switchleftoff.png", prev);
-                    app.layerManager.setLayerState("switchlefton.png", false);
+                    app.layerManager.setLayerState("switchlefton.png", prev);
+                    app.layerManager.setLayerState("switchleftoff.png", false);
+                    app.layerManager.setLayerState("greenleft.png", true);
+                    app.layerManager.setLayerState("redleft.png", false);
                     app.repaint();
                 }
             }),
@@ -84,13 +80,16 @@ public class PlanePresenter {
                 public void onClick() {
                     Boolean prev = app.layerManager.getLayerState("coverright.png");
                     app.layerManager.toggleLayerState("coverright.png");
-                    app.layerManager.setLayerState("switchrightoff.png", prev);
-                    app.layerManager.setLayerState("switchrighton.png", false);
+                    app.layerManager.setLayerState("switchrighton.png", prev);
+                    app.layerManager.setLayerState("switchrightoff.png", false);
+                    app.layerManager.setLayerState("greenright.png", true);
+                    app.layerManager.setLayerState("redright.png", false);
                     app.repaint();
                 }
             }),
             new Controls("Лівий ПК", new Rectangle(115, 129, 68, 171), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("switch");
                     //нічого не робити якщо кришка закрита
                     if (app.layerManager.getLayerState("coverleft.png")) {
                         return;
@@ -98,11 +97,15 @@ public class PlanePresenter {
                     fuelControls.toggleLeftEngine();
                     app.layerManager.toggleLayerState("switchleftoff.png");
                     app.layerManager.toggleLayerState("switchlefton.png");
+                    app.layerManager.toggleLayerState("greenleft.png");
+                    app.layerManager.toggleLayerState("redleft.png");
+                    AudioManager.play("crash");
                     app.repaint();
                 }
             }),
             new Controls("Правий ПК", new Rectangle(639, 129, 68, 171), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("switch");
                     //нічого не робити якщо кришка закрита
                     if (app.layerManager.getLayerState("coverright.png")) {
                         return;
@@ -110,11 +113,15 @@ public class PlanePresenter {
                     fuelControls.toggleLeftEngine();
                     app.layerManager.toggleLayerState("switchrightoff.png");
                     app.layerManager.toggleLayerState("switchrighton.png");
+                    app.layerManager.toggleLayerState("greenright.png");
+                    app.layerManager.toggleLayerState("redright.png");
+                    AudioManager.play("crash");
                     app.repaint();
                 }
             }),
             new Controls("Кільцювання", new Rectangle(354, 371, 122, 117), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("click");
                     fuelControls.toggleRing();
                     app.layerManager.toggleLayerState("ringon.png");
                     app.repaint();
@@ -122,6 +129,7 @@ public class PlanePresenter {
             }),
             new Controls("Лівий Насос 1", new Rectangle(94, 503, 126, 122), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("click");
                     fuelControls.toggleLeftPump1();
                     app.layerManager.toggleLayerState("pump1on.png");
                     app.repaint();
@@ -129,6 +137,7 @@ public class PlanePresenter {
             }),
             new Controls("Лівий Насос 2", new Rectangle(254, 503, 126, 122), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("click");
                     fuelControls.toggleLeftPump2();
                     app.layerManager.toggleLayerState("pump2on.png");
                     app.repaint();
@@ -136,13 +145,15 @@ public class PlanePresenter {
             }),
             new Controls("Правий Насос 1", new Rectangle(445, 503, 126, 122), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("click");
                     fuelControls.toggleRightPump1();
                     app.layerManager.toggleLayerState("pump3on.png");
-                    app.repaint();
+                    app.repaint();        
                 }
             }),
             new Controls("Правий Насос 2", new Rectangle(596, 503, 126, 122), new BBClickListener() {
                 public void onClick() {
+                    AudioManager.play("click");
                     fuelControls.toggleRightPump2();
                     app.layerManager.toggleLayerState("pump4on.png");
                     app.repaint();
@@ -155,16 +166,50 @@ public class PlanePresenter {
         }
         
     }
+    private void resetApplication(){
+        try{
+            timer.cancel();
+        } catch (Exception ex) {}
+        resetPlane.reset(fuelControls.getPlane());
+        resetPlane.resetView(app);
+        randomFuel.reset(fuelControls.getPlane());
+        fuelControls.reset();
+    }
+    private void startTimer(){
+        //запускаємо таймер
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public synchronized void run() {
+                //похідна від часу залежно від таймеру
+                double dt = System.currentTimeMillis() - scheduledExecutionTime();
+                fuelControls.tick(dt);
+                app.repaint();
+            }
+        }, 0, 1000);
+    }
     public void bindRouterToPresenter() {
-        //кнопка reset
+        //кнопка reset - ресет, не активує таймер
         app.reset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                timer.cancel();
-                resetPlane.reset(fuelControls.getPlane());
-                resetPlane.resetView(app);
-                randomFuel.reset(fuelControls.getPlane());
+                resetApplication();
+                //біндимо вільний інтерактор
+                fuelControls = new FuelControls(fuelControls.getPlane());
+                startTimer();
                 app.repaint();
             }
         });
+        //start - навчання
+        app.start.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //reset 
+                resetApplication();
+                //біндимо строгий інтерактор
+                fuelControls = new FuelControlsStrict(fuelControls.getPlane());
+                //запускаємо таймер
+                startTimer();
+                app.repaint();
+            }
+        });
+        
     }
 }

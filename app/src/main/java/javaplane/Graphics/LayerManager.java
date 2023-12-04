@@ -1,8 +1,6 @@
 package javaplane.Graphics;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
@@ -12,10 +10,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
 
+import javaplane.Audio.AudioManager;
+
 public class LayerManager {
+    public static float gauge = 0;
     public Image background;
     public Map<String, Image> layers = new HashMap<String, Image>();
     public Map<String, Boolean> layerStates = new HashMap<String, Boolean>();
@@ -117,5 +117,22 @@ public class LayerManager {
                 g2d.drawImage(layers.get(layer), 0, 0, null);
             }
         }
+        //test draw
+        //hexagon
+        g2d.setColor(Color.RED);
+        int scaler = 500;
+        float input = gauge;
+        //convert 0 1 to 0 - 180 degrees
+        float angle = (float) (180 - input * 180) / 180 * (float) Math.PI;
+
+        int sinx = scaler - (int) (scaler * Math.sin(angle));
+        int cosx = (int) (scaler * Math.cos(angle));
+        Polygon p = new Polygon(new int[]{cosx, scaler, scaler, scaler/2}, new int[]{sinx, 0, scaler, scaler}, 4);
+        Image test = layers.get("test.png");
+        //cut area outside hexagon in test image
+        g2d.setClip(p);
+        //g2d.drawImage(test, 0, 0, null);
+        //reset clip
+        g2d.setClip(null);
     }
 }

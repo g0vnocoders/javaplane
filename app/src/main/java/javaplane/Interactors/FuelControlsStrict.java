@@ -1,5 +1,6 @@
 package javaplane.Interactors;
 
+import javaplane.Audio.AudioManager;
 import javaplane.Objects.Plane;
 
 public class FuelControlsStrict extends FuelControls{
@@ -39,10 +40,14 @@ public class FuelControlsStrict extends FuelControls{
         if(state != 0 && state != 5) throw new IllegalStateException("Дизбаланс палива не усунуто");
         plane.isRingOn = !plane.isRingOn;
         state++;
+        if(state == 6){ 
+            System.out.println("У вас все вийшло !!!");
+            AudioManager.playSync("success");
+        }
     }
     public void toggleLeftPump1(){
         checkPumpState();
-        if(!pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
+        if(state < 4 && !pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
         //
         if(state == 2 && !plane.leftPump.isOn) throw new IllegalStateException("Вимкніть інший насос");
         if(state == 4 && plane.leftPump.isOn) throw new IllegalStateException("Увімкніть інший насос");
@@ -53,7 +58,7 @@ public class FuelControlsStrict extends FuelControls{
     }
     public void toggleLeftPump2(){
         checkPumpState();
-        if(!pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
+        if(state < 4 && !pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
         //
         if(state == 2 && !plane.leftPump2.isOn) throw new IllegalStateException("Вимкніть інший насос");
         if(state == 4 && plane.leftPump2.isOn) throw new IllegalStateException("Увімкніть інший насос");
@@ -64,7 +69,7 @@ public class FuelControlsStrict extends FuelControls{
     }
     public void toggleRightPump1(){
         checkPumpState();
-        if(pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
+        if(state < 4 && pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
         //
         if(state == 2 && !plane.rightPump.isOn) throw new IllegalStateException("Вимкніть інший насос");
         if(state == 4 && plane.rightPump.isOn) throw new IllegalStateException("Увімкніть інший насос");
@@ -75,7 +80,7 @@ public class FuelControlsStrict extends FuelControls{
     }
     public void toggleRightPump2(){
         checkPumpState();
-        if(pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
+        if(state < 4 && pumpToOff()) throw new IllegalStateException("Вимкніть насоси бака з меншим паливом");
         //
         if(state == 2 && !plane.rightPump2.isOn) throw new IllegalStateException("Вимкніть інший насос");
         if(state == 4 && plane.rightPump2.isOn) throw new IllegalStateException("Увімкніть інший насос");
@@ -148,6 +153,10 @@ public class FuelControlsStrict extends FuelControls{
     }
     public Boolean getRightEngineCover() {
         return rightEngineCover;
+    }
+    //скидвння
+    public void reset(){
+        state = 0;
     }
     //використовувати тільки для тестів
     public Plane getPlane() {

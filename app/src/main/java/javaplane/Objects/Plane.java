@@ -1,4 +1,7 @@
 package javaplane.Objects;
+
+import javaplane.Audio.AudioManager;
+
 /*
 Якщо різниця кількості палива в баках досягла величини 200 кгс, і
 спалахнуло табло "ДИСБАЛАНС ПАЛИВА",
@@ -11,9 +14,9 @@ package javaplane.Objects;
 //object from VIPER architecture
 public class Plane {
     //баки
-    public FuelTank leftTank = new FuelTank("Лівий", 100, 100);
-    public FuelTank rightTank = new FuelTank("Правий", 100, 100);
-    public double fuelConsumptiondx = 1.0;//літри/сек
+    public FuelTank leftTank = new FuelTank("Лівий");
+    public FuelTank rightTank = new FuelTank("Правий");
+    public double fuelConsumptiondx = 10.0;//літри/сек
     //насоси
     public Pump leftPump = new Pump("Лівий", leftTank, fuelConsumptiondx);
     public Pump leftPump2 = new Pump("Лівий2", leftTank, fuelConsumptiondx);
@@ -41,6 +44,9 @@ public class Plane {
                 double ringFlow = (leftEngineFlow + rightEngineFlow)/2;
                 //не реалізовано даним варіантом
             }   
+            else if ((leftEngineFlow == 0 || rightEngineFlow == 0) && dt > 0.1){
+                AudioManager.play("stall");
+            }
             if(!leftEngineValve && !rightEngineValve){
                 throw new RuntimeException("Обидва двигуни вимкнені!");
             }

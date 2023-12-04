@@ -2,9 +2,9 @@ package javaplane.Objects;
 
 public class FuelTank {
     //ємність баку
-    public double capacity = 100.0;
+    public double capacity = 800.0;
     //кількість палива в баку
-    public double fuel = 100.0;
+    public double fuel = 800.0;
     public String tankType = "default";
     /**
      * Пробує витратити паливо
@@ -30,5 +30,8 @@ public class FuelTank {
         this.tankType = tankType;
         this.capacity = capacity;
         this.fuel = capacity;
+    }
+    public FuelTank(String tankType) {
+        this.tankType = tankType;
     }
 }
