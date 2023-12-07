@@ -37,7 +37,7 @@ public class LayerManager {
             loadFromJar(url);
             return;
         }
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(url.getPath()))) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(url.toURI()))) {
             for (Path entry : stream) {
                 //load png
                 if(entry.toString().endsWith(".png")){
@@ -51,7 +51,7 @@ public class LayerManager {
                     layerStates.put(filename, true);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error loading images: " + e);
         }
     }
@@ -61,6 +61,10 @@ public class LayerManager {
         try {
             //get jar path
             String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+            //windows fix
+            if(jarPath.contains(":")){
+                jarPath = jarPath.substring(1);
+            }
             //load jar
             java.util.jar.JarFile jar = new java.util.jar.JarFile(jarPath);
             //get entries

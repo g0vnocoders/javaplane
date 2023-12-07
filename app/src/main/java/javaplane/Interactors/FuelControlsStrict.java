@@ -43,6 +43,7 @@ public class FuelControlsStrict extends FuelControls{
         if(state == 6){ 
             System.out.println("У вас все вийшло !!!");
             AudioManager.playSync("success");
+            throw new IllegalStateException("У вас все вийшло !!!");
         }
     }
     public void toggleLeftPump1(){

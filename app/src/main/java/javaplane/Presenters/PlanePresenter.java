@@ -167,6 +167,7 @@ public class PlanePresenter {
         
     }
     private void resetApplication(){
+        app.errText.setText("");
         try{
             timer.cancel();
         } catch (Exception ex) {}
