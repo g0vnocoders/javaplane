@@ -7,6 +7,7 @@ import javaplane.Decorators.App;
 import javaplane.Event.BBClickListener;
 import javaplane.Event.RepaintListener;
 import javaplane.Graphics.EventManager;
+import javaplane.Graphics.Gauge;
 import javaplane.Interactors.FuelControls;
 import javaplane.Interactors.FuelControlsStrict;
 import javaplane.Routers.RandomFuel;
@@ -46,21 +47,20 @@ public class PlanePresenter {
         bindRouterToPresenter();
         resetPlane.reset(fuelControls.getPlane());
         resetPlane.resetView(app);
-        new Thread(() -> {
-            while(true){
-                app.layerManager.gauge = (float) fuelControls.getPlane().leftTank.fuel / (float) fuelControls.getPlane().leftTank.capacity;
-                try{
-                    Thread.sleep(100);
-                } catch (Exception ex) {}
-            }
-        }).start();
     }
     public void bindDecoratorToPresenter() {        
         //перемальовка семисегментного дисплея
         app.repaintListeners.add(new RepaintListener() {
             public void repaintRequested(java.awt.Graphics g) {
-                g.drawString(String.valueOf(fuelControls.getLeftTankFuel()), 180, 850);
-                g.drawString(String.valueOf(fuelControls.getRightTankFuel()), 535, 850);
+                g.setColor(java.awt.Color.BLACK);
+                Gauge.drawCenteredString(g, fuelControls.getLeftTankFuel(), new Rectangle(205, 820, 40, 80));
+                Gauge.drawCenteredString(g, fuelControls.getRightTankFuel(), new Rectangle(558, 820, 40, 80));
+
+
+                double left = fuelControls.getPlane().leftTank.fuel / fuelControls.getPlane().leftTank.capacity;
+                double right = fuelControls.getPlane().rightTank.fuel / fuelControls.getPlane().rightTank.capacity;
+                Gauge.draw(g, 102, 658, left, app.layerManager.layers.get("gauge.png"));
+                Gauge.draw(g, 451, 658, right, app.layerManager.layers.get("gauge.png"));
             };
         });
         //додаємо обробники кліків на кнопки

@@ -16,7 +16,7 @@ public class Plane {
     //баки
     public FuelTank leftTank = new FuelTank("Лівий");
     public FuelTank rightTank = new FuelTank("Правий");
-    public double fuelConsumptiondx = 10.0;//літри/сек
+    public double fuelConsumptiondx = 3.4;//літри/сек
     //насоси
     public Pump leftPump = new Pump("Лівий", leftTank, fuelConsumptiondx);
     public Pump leftPump2 = new Pump("Лівий2", leftTank, fuelConsumptiondx);
