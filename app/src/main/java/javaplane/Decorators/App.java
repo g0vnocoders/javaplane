@@ -4,8 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
 
 import javax.swing.JFrame;
+
+import javaplane.Main;
 import javaplane.Event.RepaintListener;
 import javaplane.Graphics.AppCanvas;
 import javaplane.Graphics.LayerManager;
@@ -20,29 +25,7 @@ public class App extends JFrame implements ActionListener {
     public JButton voice = new JButton("Голос");
     public JButton help = new JButton("Help");
     public JLabel errText = new JLabel("<html>Виберіть режим симулятора, щоб почати.</html>");
-    public JLabel helpText = new JLabel("<html>Якщо різниця кількості\n" + //
-            "палива в баках досягла\n" + //
-            "величини 200 кгс, і\n" + //
-            "спалахнуло табло\n" + //
-            "&quot;ДИСБАЛАНС ПАЛИВА&quot;,\n" + //
-            "усуньте дисбаланс палива з\n" + //
-            "точністю до ±50 кгс таким\n" + //
-            "чином:\n" + //
-            "<ul>\n" + //
-            "<li>відкрийте кран\n" + //
-            "кільцювання;</li>\n" + //
-            "<li>відключіть насоси бака з\n" + //
-            "меншою кількістю палива та\n" + //
-            "витрачайте на обидва\n" + //
-            "двигуни різницю палива з\n" + //
-            "бака з більшою кількістю\n" + //
-            "палива;</li>\n" + //
-            "<li>після вирівнювання\n" + //
-            "кількості палива в баках\n" + //
-            "увімкніть відключені насоси;\n" + //
-            "- закрийте кран кільцювання.\n" + //
-            "</li>\n" + //
-            "</ul></html>");
+    public JLabel helpText = new JLabel();
     public App() {
         super("JavaPlane");
         //resize to bg image size
@@ -61,6 +44,14 @@ public class App extends JFrame implements ActionListener {
         helpText.setBackground(new java.awt.Color(240, 240, 240));
         errText.setBounds(850, 50, 300, 200);
         errText.setBackground(new java.awt.Color(240, 240, 240));
+        //load help from file instructions.html
+        try {
+            InputStream stream = getClass().getResourceAsStream("/instruction.html");
+            String text = new String(stream.readAllBytes());
+            helpText.setText(text);
+        } catch (Exception e) {
+            System.out.println("Error loading help: " + e);
+        }
 
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(null);
