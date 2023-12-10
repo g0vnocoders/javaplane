@@ -20,10 +20,6 @@ public class App extends JFrame implements ActionListener {
     public LayerManager layerManager = new LayerManager();
     public List<RepaintListener> repaintListeners = new ArrayList<>();
     public AppCanvas canvas;
-    public JButton start = new JButton("Навчання");
-    public JButton reset = new JButton("Самостійно");
-    public JButton voice = new JButton("Голос");
-    public JButton help = new JButton("Help");
     public JLabel errText = new JLabel("<html>Виберіть режим симулятора, щоб почати.</html>");
     public JLabel helpText = new JLabel();
     public App() {
@@ -35,14 +31,10 @@ public class App extends JFrame implements ActionListener {
         canvas = new AppCanvas(layerManager, this);
         add(canvas);
         setVisible(true);
-        //align buttons
-        start.setBounds(850, 0, 100, 50);
-        reset.setBounds(850, 50, 100, 50);
-        voice.setBounds(1000, 0, 100, 50);
-        help.setBounds(1000, 50, 100, 50);
-        helpText.setBounds(850, 50, 300, 500);
+        //align
+        helpText.setBounds(850, 140, 300, 500);
         helpText.setBackground(new java.awt.Color(240, 240, 240));
-        errText.setBounds(850, 50, 300, 200);
+        errText.setBounds(850, 140, 300, 200);
         errText.setBackground(new java.awt.Color(240, 240, 240));
         //load help from file instructions.html
         try {
@@ -55,10 +47,6 @@ public class App extends JFrame implements ActionListener {
 
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(null);
-        controlPanel.add(start);
-        controlPanel.add(reset);
-        controlPanel.add(voice);
-        controlPanel.add(help);
         controlPanel.add(helpText);
         controlPanel.add(errText);
         add(controlPanel);
@@ -78,8 +66,8 @@ public class App extends JFrame implements ActionListener {
         super.repaint();
         canvas.revalidate();
         canvas.repaint();
+        super.repaint();
     }
     //глобальний обробник подій
-    public void actionPerformed(ActionEvent e) {
-    }
+    public void actionPerformed(ActionEvent e) {}
 }

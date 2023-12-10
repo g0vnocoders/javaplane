@@ -29,6 +29,9 @@ public class ResetPlane implements Router {
         app.layerManager.setLayerState("pump2on.png", true);
         app.layerManager.setLayerState("pump3on.png", true);
         app.layerManager.setLayerState("pump4on.png", true);
+        //дизбаланс
+        app.layerManager.setLayerState("disbalansoff.png", true);
+        app.layerManager.setLayerState("disbalanson.png", false);
 
         app.repaint();
     }

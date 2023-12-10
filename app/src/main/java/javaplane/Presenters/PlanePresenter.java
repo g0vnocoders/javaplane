@@ -184,24 +184,37 @@ public class PlanePresenter {
                 //похідна від часу залежно від таймеру
                 double dt = System.currentTimeMillis() - scheduledExecutionTime();
                 fuelControls.tick(dt);
+                
+                //balance/disbalance
+                Boolean isDisbalance = app.layerManager.getLayerState("disbalanson.png");
+                //дизбаланс став балансом
+                if(isDisbalance && fuelControls.getFuelBalanceGood()){
+                    app.layerManager.setLayerState("disbalanson.png", true);
+                    app.layerManager.setLayerState("disbalansoff.png", false);
+                }
+                //баланс став дизбалансом
+                if(!isDisbalance && !fuelControls.getFuelBalanceGood()){
+                    app.layerManager.setLayerState("disbalanson.png", false);
+                    app.layerManager.setLayerState("disbalansoff.png", true);
+                }
+                
                 app.repaint();
             }
         }, 0, 1000);
     }
     public void bindRouterToPresenter() {
         //кнопка reset - ресет, не активує таймер
-        app.reset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resetApplication();
+        eventManager.registerClickEvent("Reset", new Rectangle(850, 80, 100, 50), new BBClickListener() {
+            public void onClick() {
+                 resetApplication();
                 //біндимо вільний інтерактор
                 fuelControls = new FuelControls(fuelControls.getPlane());
                 startTimer();
                 app.repaint();
             }
         });
-        //start - навчання
-        app.start.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        eventManager.registerClickEvent("Start", new Rectangle(1050, 80, 100, 50), new BBClickListener() {
+            public void onClick() {
                 //reset 
                 resetApplication();
                 //біндимо строгий інтерактор
