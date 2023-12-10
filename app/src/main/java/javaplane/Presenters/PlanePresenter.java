@@ -189,13 +189,13 @@ public class PlanePresenter {
                 Boolean isDisbalance = app.layerManager.getLayerState("disbalanson.png");
                 //дизбаланс став балансом
                 if(isDisbalance && fuelControls.getFuelBalanceGood()){
-                    app.layerManager.setLayerState("disbalanson.png", true);
-                    app.layerManager.setLayerState("disbalansoff.png", false);
-                }
-                //баланс став дизбалансом
-                if(!isDisbalance && !fuelControls.getFuelBalanceGood()){
                     app.layerManager.setLayerState("disbalanson.png", false);
                     app.layerManager.setLayerState("disbalansoff.png", true);
+                }
+                //баланс став дизбалансом
+                if(!isDisbalance && fuelControls.getFuelDisbalance()){
+                    app.layerManager.setLayerState("disbalanson.png", true);
+                    app.layerManager.setLayerState("disbalansoff.png", false);
                 }
                 
                 app.repaint();
