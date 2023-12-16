@@ -29,7 +29,7 @@ public class Plane {
     public Boolean rightEngineValve = true;
 
     public Boolean getFuelDisbalance(){
-        return Math.abs(leftTank.fuel - rightTank.fuel) > 200;
+        return Math.abs(leftTank.fuel - rightTank.fuel) > 200;//якщо різниця палива баків більша за 200 кгс по модулю вернути true
     }
     public Boolean getFuelBalanceGood(){
         return Math.abs(leftTank.fuel - rightTank.fuel) < 50;
@@ -40,11 +40,7 @@ public class Plane {
             double leftEngineFlow = leftPump.consume(dt) + leftPump2.consume(dt);
             double rightEngineFlow = rightPump.consume(dt) + rightPump2.consume(dt);
             //кільцювання рівномірно розподіляє паливо між двигунами
-            if(isRingOn){
-                double ringFlow = (leftEngineFlow + rightEngineFlow)/2;
-                //не реалізовано даним варіантом
-            }   
-            else if ((leftEngineFlow == 0 || rightEngineFlow == 0) && dt > 0.1){
+            if ((leftEngineFlow == 0 || rightEngineFlow == 0) && dt > 0.1){
                 AudioManager.play("stall");
             }
             if(!leftEngineValve && !rightEngineValve){
