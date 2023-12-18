@@ -5,6 +5,7 @@ import javaplane.Objects.Plane;
 
 public class FuelControlsStrict extends FuelControls{
     private Plane plane;
+    private int which = 0; // який насос використовуємо
     private int state = 0; // кроки виконання дій на симуляторі
     /*
      * 0 - початковий стан, маємо дизбаланс палива який треба усунути
@@ -25,10 +26,15 @@ public class FuelControlsStrict extends FuelControls{
     //методи унікальні для строгого режиму
     //false якщо лівий, true якщо правий
     public boolean pumpToOff(){
-        if(plane.leftTank.fuel > plane.rightTank.fuel)
+        if(which != 0) return which == 2;
+        if(plane.leftTank.fuel > plane.rightTank.fuel){
+            which = 1;
             return false;
-        else
+        }
+        else{
+            which = 2;
             return true;
+        }
     }
     public void checkPumpState(){
         if(state==0) throw new IllegalStateException("Спочатку увімкніть кран кільцювання");
@@ -37,7 +43,7 @@ public class FuelControlsStrict extends FuelControls{
     //модифіковані методи вільного режиму 
     public void toggleRing(){
         if(state == 3) throw new IllegalStateException("Спочатку увімкніть насоси, а потім вимкніть кран кільцювання");
-        if(state != 0 && state != 5) throw new IllegalStateException("Дизбаланс палива не усунуто");
+        if(state != 0 && state != 5 && state < 6) throw new IllegalStateException("Дизбаланс палива не усунуто");
         plane.isRingOn = !plane.isRingOn;
         state++;
         if(state == 6){ 
