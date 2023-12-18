@@ -6,11 +6,15 @@ package javaplane.Objects;
  * Приймає відкриття/закриття крану кільцювання 
  */
 public class Pump {
-    public FuelTank tank;
-    public String pumpType;
-    public double fuelConsumptiondx;
-    public boolean isOn = false;
+    public FuelTank tank;//бак з паливом який підключений до насосу
+    public String pumpType;//лівий чи правий
+    public double fuelConsumptiondx;//літри/сек - скільки палива витрачає насос
+    public boolean isOn = false;//увімкнений чи вимкнений
 
+    //конструктор насосу, приймає 
+    //String pumpType тип насосу, 
+    //FuelTank tank бак з паливом який підключений до насосу, 
+    //double fuelConsumptiondx скільки палива витрачає насос
     public Pump(String pumpType, FuelTank tank, double fuelConsumptiondx) {
         this.pumpType = pumpType;
         this.tank = tank;
@@ -21,11 +25,10 @@ public class Pump {
      * @param dt - час витрачання палива в секундах
      * @return кількість палива що витрачено
      * @throws NoFuelException - якщо палива немає
-     * @throws PumpIsOffException - якщо насос вимкнений
      */
-    public double consume(double dt) throws NoFuelException, PumpIsOffException {
-        if(!isOn)
-            return 0;//throw new PumpIsOffException(pumpType);
+    public double consume(double dt) {
+        if(!isOn)//якщо насос не включений то не витрачаємо паливо
+            return 0;
         return tank.consume(fuelConsumptiondx) * dt;// літри/сек * сек = літри
     }
 }

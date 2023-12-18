@@ -13,7 +13,7 @@ public class FuelTank {
      * @throws NoFuelException - якщо палива немає
      */
     public double consume(double amount) throws NoFuelException {
-        if(amount > fuel){
+        if(amount > fuel){//якщо хочемо витратити більше ніж є
             fuel = 0;
             throw new NoFuelException(tankType);
         }
