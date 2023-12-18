@@ -41,7 +41,8 @@ public class Plane {
             double leftEngineFlow = leftPump.consume(dt) + leftPump2.consume(dt);
             double rightEngineFlow = rightPump.consume(dt) + rightPump2.consume(dt);
             //якщо 0 палива то граємо звук що двигун заглох
-            if ((leftEngineFlow == 0 || rightEngineFlow == 0) && dt > 0.1){
+            //кран кільцювання дозволяє використовувати паливо з баків з нерівними кількостями палива
+            if ((leftEngineFlow == 0 || rightEngineFlow == 0) && dt > 0.1 && !isRingOn){
                 AudioManager.play("stall");
             }
             if(!leftEngineValve && !rightEngineValve){
